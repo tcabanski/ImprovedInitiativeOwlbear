@@ -19,7 +19,7 @@ axios.get('http://localhost:3000').then(response => {
 }).catch(error => console.error(error));
 
 var socket = io('http://localhost:3000');
-socket.on('greeting-from-server', function (message) {
+socket.on('combatants', function (message) {
   console.log(message.combatants);
   var html = '';
   message.combatants.forEach(combatant => {
@@ -30,9 +30,6 @@ socket.on('greeting-from-server', function (message) {
   html += `${combatant.init} ${combatant.name} ${combatant.hp}</div>`
     });
   document.querySelector('#app').innerHTML = html;
-  socket.emit('greeting-from-client', {
-      greeting: 'Hello Server'
-  });
 });
 
 /*

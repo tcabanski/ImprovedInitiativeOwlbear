@@ -6,7 +6,7 @@ const app = express();
 const scraper = require('./scraper');
 const port = 3000;
 
-app.use(cors())
+app.use(cors());
 
 app.get('/', async(req, res) => {
   res.send(await scraper.scrape())
@@ -20,11 +20,10 @@ io = socketIO(server, {cors : {
     origins: ['*'],
 }});
 
+scraper.open(io);
+
 io.on('connection', function (socket) {
-  socket.emit('greeting-from-server', {
-      combatants: scraper.scrape
-  });
-  socket.on('greeting-from-client', function (message) {
-    console.log(message);
+  socket.emit('combatants', {
+      combatants: scraper.scrape()
   });
 });

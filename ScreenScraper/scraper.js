@@ -2,13 +2,63 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
+var browser;
+var page;
+const improvedInitiativeUrl = 'https://improvedinitiative.app/p/9vcmqj0s';
+var changeOccuredCallback;
+var socketIo;
+
+async function open(io) {
+  try {
+    socketIo = io;
+    browser = await puppeteer.launch();
+    page = await browser.newPage();
+    await page.goto(improvedInitiativeUrl);
+    await page.exposeFunction('changeOccured', function() {
+      changeCallback();
+    });
+  
+    await page.evaluate(() => {
+      var observer = new MutationObserver((mutations) => { 
+        if (mutations.length > 0) {
+          changeOccured();
+        }
+      });
+      observer.observe(document.querySelector(".combatants"), { attributes: true, characterData: true, childList: true, subtree: true });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function changeCallback() {
+  var combatants = await getCombatants();
+  io.emit('combatants', {
+    combatants: await getCombatants()
+  });
+}
+
+async function close() {
+  try {
+    await browser.close();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function scrape() {
   try {
-    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto('https://improvedinitiative.app/p/q56at5np');
+    await page.goto(improvedInitiativeUrl);
     await page.waitForSelector('.combatant', { timeout: 5000 });
+    return await getCombatants();
+  } catch (error) {
+    console.log(error);
+  }
+}
 
+async function getCombatants() {
+  try {
     const combatants = await page.evaluate(() => {
         hold = []
         const s = document.querySelectorAll('.combatant');
@@ -33,16 +83,6 @@ async function scrape() {
     });
     console.log(combatants)
 
-    html = '';
-    combatants.forEach(combatant => {
-      html += '<div>'
-      if (combatant.isCurrent) {
-        html += '!!'
-      }
-      html += `${combatant.init} ${combatant.name} ${combatant.hp}</div>`
-    });
-
-    await browser.close();
     return combatants;
   } catch (error) {
     console.log(error);
@@ -50,3 +90,5 @@ async function scrape() {
 }
 
 exports.scrape = scrape;
+exports.open = open;
+exports.close = close;
