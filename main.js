@@ -10,7 +10,7 @@ import OBR from '@owlbear-rodeo/sdk'
 //var url = 'http://localhost:3000';
 
 //production
-var url = 'http://73.155.41.67:3000';
+var url = 'http://http://18.188.89.43:8080/';
 
 var theme;
 if (OBR.isAvailable) {
