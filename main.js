@@ -67,13 +67,13 @@ function displayCombatants(combatants) {
     var greenHeartUrl = new URL('greenheart.svg', import.meta.url).href
     switch (combatant.hp) {
       case 'Healthy':
-        healthIndicator = '<img src="/greenheart.svg" height="20" width="20" alt="Healthy" />';
+        healthIndicator = '<img src="/greenHeart.svg" height="20" width="20" alt="Healthy" />';
         break;
       case 'Hurt':
-        healthIndicator = '<img src="/yellowheart.svg" height="20" width="20" alt="Hurt" />';
+        healthIndicator = '<img src="/yellowHeart.svg" height="20" width="20" alt="Hurt" />';
         break;
       case 'Bloodied':
-        healthIndicator = '<img src="/redheart.svg" height="20" width="20" alt="Bloodied" />';
+        healthIndicator = '<img src="/redHeart.svg" height="20" width="20" alt="Bloodied" />';
         break;
       case 'Defeated':
         healthIndicator = '<img src="/skull.svg" height="20" width="20" alt="Dead" />';
