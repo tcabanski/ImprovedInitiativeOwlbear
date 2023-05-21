@@ -6,6 +6,12 @@ import axios from 'axios'
 import { io } from 'socket.io-client'
 import OBR from '@owlbear-rodeo/sdk'
 
+//test
+var url = 'http://localhost:3000';
+
+//production
+//var url = 'http://73.155.41.67:3000';
+
 var theme;
 if (OBR.isAvailable) {
   OBR.onReady(async () => {
@@ -14,13 +20,13 @@ if (OBR.isAvailable) {
 }
 
 load();
-var socket = io('http://localhost:3000');
+var socket = io(url);
 socket.on('combatants', function (message) {
   displayCombatants(message.combatants);
 });
 
 function load() {
-  axios.get('http://localhost:3000').then(response => {
+  axios.get(url).then(response => {
     displayCombatants(response.data);
   }).catch(error => console.error(error));
 }
@@ -56,19 +62,21 @@ function displayCombatants(combatants) {
     } else {
       html += '<div class="row">'
     }
+
     var healthIndicator = 'unknown';
+    var greenHeartUrl = new URL('greenheart.svg', import.meta.url).href
     switch (combatant.hp) {
       case 'Healthy':
-        healthIndicator = '<img src="/public/greenheart.svg" height="20" width="20" alt="Healthy" />';
+        healthIndicator = '<img src="/greenheart.svg" height="20" width="20" alt="Healthy" />';
         break;
       case 'Hurt':
-        healthIndicator = '<img src="/public/yellowheart.svg" height="20" width="20" alt="Hurt" />';
+        healthIndicator = '<img src="/yellowheart.svg" height="20" width="20" alt="Hurt" />';
         break;
       case 'Bloodied':
-        healthIndicator = '<img src="/public/redheart.svg" height="20" width="20" alt="Bloodied" />';
+        healthIndicator = '<img src="/redheart.svg" height="20" width="20" alt="Bloodied" />';
         break;
       case 'Defeated':
-        healthIndicator = '<img src="/public/skull.svg" height="20" width="20" alt="Dead" />';
+        healthIndicator = '<img src="/skull.svg" height="20" width="20" alt="Dead" />';
         break;
       default:
         healthIndicator = '---';
