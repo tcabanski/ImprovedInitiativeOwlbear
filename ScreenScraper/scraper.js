@@ -81,7 +81,7 @@ async function getCombatants() {
         })
         return hold
     });
-    console.log(combatants)
+    console.log(`Get combatants has ${combatants.length} combatants`)
 
     return combatants;
   } catch (error) {

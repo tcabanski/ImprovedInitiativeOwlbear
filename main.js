@@ -10,32 +10,29 @@ var theme;
 if (OBR.isAvailable) {
   OBR.onReady(async () => {
     theme = await OBR.theme.getTheme();
-  })
+  });
 }
 
-axios.get('http://localhost:3000').then(response => {
-  displayCombatants(response.data);
-}).catch(error => console.error(error));
-
+load();
 var socket = io('http://localhost:3000');
 socket.on('combatants', function (message) {
   displayCombatants(message.combatants);
 });
 
+function load() {
+  axios.get('http://localhost:3000').then(response => {
+    displayCombatants(response.data);
+  }).catch(error => console.error(error));
+}
+
 function displayCombatants(combatants) {
-  console.log(combatants);
   var style = '';
   var highlightStyle = '';
   if (OBR.isAvailable) {
-    console.log(theme);
-    console.log('Background:' + theme.background.default);
-    console.log('Highlight:' + theme.secondary.light);
-    console.log('Text:' + theme.text.primary);
     style = ` style="background-color:${theme.background.default};color:${theme.text.primary}"`;
     highlightStyle =` style="background-color:${theme.secondary.dark};color:${theme.secondary.contrastText}"`;
   }
 
-  console.log(style);
   var html = `
   <div class="container"${style}">
     <div class="row">
