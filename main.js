@@ -6,11 +6,7 @@ import axios from 'axios'
 import { io } from 'socket.io-client'
 import OBR from '@owlbear-rodeo/sdk'
 
-//test
-//var url = 'http://localhost:3000';
-
-//production
-var url = 'http://3.23.67.172:8080/';
+var url = 'https://improvedinitiative.oldmadmage.com/';
 
 var theme;
 if (OBR.isAvailable) {
@@ -35,12 +31,12 @@ function displayCombatants(combatants) {
   var style = '';
   var highlightStyle = '';
   if (OBR.isAvailable) {
-    style = ` style="background-color:${theme.background.default};color:${theme.text.primary}"`;
+    style = `background-color:${theme.background.default};color:${theme.text.primary}`;
     highlightStyle =` style="background-color:${theme.secondary.dark};color:${theme.secondary.contrastText}"`;
   }
 
   var html = `
-  <div class="container"${style}">
+  <div class="container">
     <div class="row">
       <div class="col-2">
         <h6 class='float-start'>Init</h6>
@@ -86,5 +82,6 @@ function displayCombatants(combatants) {
     html += `<div class="col-2"><span class='float-start'>${combatant.init}</span></div><div class="col-8">
       <span class='float-start'>${combatant.name}</div></span><div class="col-1"><span class='float-start'>${healthIndicator}</span></div></div>`
   });
+  document.querySelector('body').setAttribute('style', `display:block;${style}`);
   document.querySelector('#myApp').innerHTML = html + '</div>';
 }
